@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            text-align: center;
+            background: black;
+            color: white;
+        }
+        section{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 10px;
+            min-height: 100vh;
+        }
+        .party{
+            background: radial-gradient(circle, #000428, #004e92);
+            /* display: none; */
+        }
+        .birthday {
+            /* background: linear-gradient(175deg, pink, purple); */
+            background-color: rgb(172, 237, 255);
+            overflow: hidden;
+        }
+       
+        .text{
+            font-size: 2.5rem;
+            color: cyan;
+            text-shadow: 0 0 10px cyan, 0 0 30px cyan;
+            animation: glow 1.5s infinite alternate;
+        }
+        @keyframes glow {
+            from{opacity: 0.7;}
+            to{opacity: 1;}
+        }
+        .birthday-text {
+            font-size: 2.5rem;
+            color: #d80073;
+            animation: pop 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pop {
+            from { transform: scale(0.8); }
+            to { transform: scale(1.1); }
+        }
+
+        #wish-text {
+            font-size: 1.3rem;
+            color: #4a148c;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        #countdown {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: rgb(249, 249, 4);
+            /* text-shadow: 0 0 5px yellow, 0 0 15px orange; */
+            margin-top: 20px;
+        }
+       
+        .birthday .f1 {
+            position: absolute; 
+            height: 250px;
+            width: 250px;       
+            /* height: auto; */
+            z-index: 10;       
+        }
+
+
+        .birthday .f1:nth-of-type(1) {
+            top: 1px;
+            left: 1px;
+        }
+
+
+        .birthday .f1:nth-of-type(2) {
+            bottom: 1px;
+            right: 1px;
+        }
+
+
+        button{
+            font-size: 18px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            margin-top: 25px;
+            padding: 12px 25px;
+             background: linear-gradient(45deg, #ff4081, #ffcc00);
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+        }
+
+        .gif{
+            /* border: 2px solid red; */
+            /* margin-top: 20px; */
+            width: 280px;
+            max-width: 80%;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: fall linear infinite;
+            border: 2px solid red;
+        }
+
+        @keyframes fall {
+            from{ transform: translateY(-110vh);}
+            to {transform: translateY(100vh) rotate(360deg);}
+        }
+
+         .hidden{
+            display: none;
+            background-color: rgb(172, 237, 255);
+        }
+      
+
+        @media (max-width: 600px){
+            h1{
+                font-size: 2rem;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <section class="party" id="partySection">
+        <h1 class="text">🎉It's Party Time🎉</h1>
+       
+
+        <img class="gif" src="party.gif" alt="">
+
+        <button onclick="startParty()">Start Party</button>
+
+        <p id="countdown"></p>
+
+        <audio id="partySong" src="pmusic.mp3"></audio>
+
+        <div id="confetti1"></div>
+    </section>
+
+
+    <section class="birthday hidden" id="birthdaySection">
+        <img src="frame1.png" class="f1" alt="img">
+        <img src="frame2.png" class="f1" alt="img">
+        <h1 class="birthday-text" id="birthday-text"></h1>
+        <p id="wish-text"></p>
+        <div id="confetti2"></div>
+        <img class="gif" src="" alt="">
+
+        <button onclick="startBirthday()">Start Birthday Celebration</button>
+
+        <audio id="birthdaySong" src="happy.mp3"></audio>
+    </section>
+
+
+    <script>
+        const message = "🎂Happy Birthday Rahul Sir !";
+        const wish = "Your guidance, dedication and wisdom inspire us every day.\n Wishing you good health and happiness."
+        const textElement = document.getElementById("birthday-text");
+        const wishElement = document.getElementById("wish-text")
+        const partySong = document.getElementById("partySong");
+        const birthdaySong = document.getElementById("birthdaySong");
+        const partySection = document.getElementById("partySection");
+        const birthdaySection = document.getElementById("birthdaySection");
+        const countdownText = document.getElementById("countdown");
+        const confettiContainer = document.getElementById("confetti");
+
+        let timeLeft = 12;
+        let timer;
+        
+
+        function startParty() {
+            partySong.play();
+            startCountDown();
+            generateConfetti("confetti1");
+        }
+
+        function startCountDown(){
+            countdownText.textContent = `B'day Celebration start in ${timeLeft}s`;
+       
+
+            timer = setInterval(() => {
+                timeLeft--;
+                countdownText.textContent = `B'day Celebration start in ${timeLeft}s`;
+
+                if (timeLeft === 0){
+                clearInterval(timer);
+                endParty();
+                }
+            }, 1000);
+        }
+        
+        function endParty() {
+            partySong.pause();
+            partySong.currentTime = 0;
+            partySection.style.display = "none";
+            birthdaySection.classList.remove("hidden");
+        }
+
+        let i = 0; 
+        let j = 0;
+
+
+        function startBirthday() {
+            birthdaySong.play();
+            i = 0;
+            j = 0;
+            textElement.innerHTML = ""; 
+            wishElement.innerHTML = ""; 
+            generateConfetti("confetti2");
+            typeText();
+        }
+
+        
+
+        function typeText(){
+            if(i < message.length){
+                textElement.innerHTML += message.charAt(i);
+                i++;
+                setTimeout(typeText, 120);  
+            } else{
+                setTimeout(typeWish, 400);
+            }
+        }
+
+        function typeWish() {
+            if (j < wish.length) {
+                if (wish.charAt(j) === "\n") {
+                    wishElement.innerHTML += "<br>";
+                } else {
+                    wishElement.innerHTML += wish.charAt(j);
+                }
+                j++;
+                setTimeout(typeWish, 60);
+                }
+        }
+
+        function generateConfetti(containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = "";
+            for (let i = 0; i < 150; i++) {
+                const confetti = document.createElement("div");
+                confetti.classList.add("confetti");
+                confetti.style.left = Math.random() * 100 + "vw";
+                confetti.style.backgroundColor = randomColor();
+                confetti.style.animationDuration = Math.random() * 3 + 2 + "s";
+                container.appendChild(confetti);
+            }
+        }
+        function randomColor() {
+        const colors = ["red", "yellow", "blue", "green", "pink", "purple"];
+        return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+    </script>
+</body>
+</html>
