@@ -147,7 +147,7 @@
         <h1 class="text">🎉It's Party Time🎉</h1>
        
 
-        <img class="gif" src="party.gif" alt="">
+        <img class="gif" id="partyGif" src="" alt="">
 
         <button onclick="startParty()">Start Party</button>
 
@@ -189,7 +189,8 @@
         let timer;
         
 
-        function startParty() {
+        function startParty() { 
+            partyGif.src = "party.gif";
             partySong.play();
             startCountDown();
             generateConfetti("confetti1");
@@ -276,5 +277,6 @@
 </body>
 
 </html>
+
 
 
